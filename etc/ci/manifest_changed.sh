@@ -14,7 +14,7 @@ set -o pipefail
 # and then pass it into wptrunner, which won't be able to find any tests named
 # "SKIP_TESTS", and thus won't run any.
 # Adding "--binary=" to skip looking for a compiled servo binary.
-./mach test-wpt --manifest-update --binary= SKIP_TESTS > /dev/null
+./mach test-wpt --manifest-update --binary= SKIP_TESTS
 
 diff="$(git diff -- tests/*/MANIFEST.json)"
 echo "${diff}"
