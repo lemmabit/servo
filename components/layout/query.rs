@@ -866,6 +866,27 @@ where
 
 pub fn process_offset_parent_query<N: LayoutNode>(requested_node: N, layout_root: &mut Flow)
         -> OffsetParentResponse {
+    fn traverse(subflow: &mut Flow, depth: i16) {
+        for _ in 0..depth {
+            print!("  ");
+        }
+        println!("{:?}", subflow);
+        subflow.mutate_fragments(&mut |f: &mut Fragment| {
+            for _ in -1..depth {
+                print!("  ");
+            }
+            println!("{:?}", f);
+        });
+        for _ in -1..depth {
+            print!("  ");
+        }
+        println!(">>>>");
+        for child in flow::child_iter_mut(subflow) {
+            traverse(child, depth + 1);
+        }
+    }
+    traverse(layout_root, 0);
+
     let mut iterator = ParentOffsetBorderBoxIterator::new(requested_node.opaque());
     sequential::iterate_through_flow_tree_fragment_border_boxes(layout_root, &mut iterator);
 
